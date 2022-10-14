@@ -3,6 +3,7 @@ import tkinter as tk
 from pytube import YouTube
 import urllib
 from PIL import ImageTk, Image
+from moviepy.video.io.VideoFileClip import AudioFileClip
 
 class Window:
     def __init__(self):
@@ -70,7 +71,7 @@ class Window:
         self.url = str(self.entry_box.get())
         self.url1 = YouTube(self.url)
         self.video = self.url1.streams.filter(progressive=True, file_extension='mp4').order_by('resolution').desc().first()
-        self.audio = self.url1.streams.filter(only_audio=True, file_extension='mp3')
+        self.audio = self.url1.streams.filter(only_audio=True).first()
         self.title_video = self.url1.title
         self.length_video = self.url1.length
         self.thumbnail_url = self.url1.thumbnail_url
@@ -113,7 +114,10 @@ class Window:
         self.video.download()
 
     def download_mp3(self):
-        pass
+        self.filename = self.audio.download()
+        self.file = AudioFileClip(self.filename)
+        self.file.write_audiofile(self.filename[:-4] + '.mp3')
+        self.file.close()
 
 
 Window()
