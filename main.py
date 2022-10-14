@@ -1,9 +1,9 @@
 import io
+import os
 import tkinter as tk
 from pytube import YouTube
 import urllib
 from PIL import ImageTk, Image
-from moviepy.video.io.VideoFileClip import AudioFileClip
 
 class Window:
     def __init__(self):
@@ -115,9 +115,7 @@ class Window:
 
     def download_mp3(self):
         self.filename = self.audio.download()
-        self.file = AudioFileClip(self.filename)
-        self.file.write_audiofile(self.filename[:-4] + '.mp3')
-        self.file.close()
+        os.rename(self.filename, f'{self.filename[0:-4]}' + '.mp3')
 
 
 Window()
